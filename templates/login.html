@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block body %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+
+<div class="login-container">
+    <h2>Sign In</h2>
+    <form id="loginForm" action="{{url_for('auth.login')}}" method="post">
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" required>
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required>
+            <div class="show-password" onclick="togglePassword()">Show/Hide Password</div>
+        </div>
+        <button type="submit" class="btn">Login</button>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="{{ 'error-message' if category == 'error' else 'success-message' }}">
+            {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+        <div class="links">
+            <a href="{{ url_for('auth.forgot_password') }}">Forgot Password?</a> |
+            <a href="{{ url_for('auth.register') }}">Sign Up</a>
+        </div>
+    </form>
+</div>
+
+<!-- Toast notification -->
+<div class="toast" id="accountDeletedToast">
+    <span class="toast-icon">&#10003;</span>
+    Your account has been permanently deleted.
+</div>
+
+{% endblock %}
+
+{% block js %}
+<script src="{{ url_for('static', filename='js/login.js') }}"></script>
+{% endblock %}

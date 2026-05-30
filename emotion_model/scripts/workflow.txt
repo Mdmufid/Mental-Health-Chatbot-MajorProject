@@ -1,0 +1,4 @@
+1. prepare_data.py   → creates train_v3, val_v3, test_v3
+2. train.py          → uses train_v3 + val_v3
+3. evaluate.py       → uses test_v3 ONLY (run once, final score)
+4. predict.py        → live demo

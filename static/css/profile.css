@@ -1,0 +1,325 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #e6f2f2, #f9f9f9);
+    color: #4a6c6f;
+    min-height: 100vh;
+}
+
+/* Full-screen centering wrapper */
+.profile-wrapper {
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem 1rem;
+}
+
+.profile-container {
+    background: #ffffff;
+    padding: 2rem;
+    border-radius: 14px;
+    box-shadow: 0 4px 20px rgba(74, 108, 111, 0.12);
+    width: 100%;
+    max-width: 480px;
+}
+
+.profile-container h2 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #2e5052;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+/* Form fields */
+.form-group {
+    margin-bottom: 1rem;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.4rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #6a9499;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    padding: 0.72rem 0.9rem;
+    border: 1px solid #cfd8dc;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    color: #3a5c5f;
+    background: #f9fdfd;
+    outline: none;
+    transition: border 0.25s, box-shadow 0.25s;
+}
+
+input:focus {
+    border-color: #80cbc4;
+    box-shadow: 0 0 0 3px rgba(128, 203, 196, 0.2);
+}
+
+/* Base button style */
+.btn {
+    display: block;
+    width: 100%;
+    padding: 0.75rem 1.2rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    text-align: center;
+}
+
+.btn:hover {
+    transform: scale(1.01);
+}
+
+/* Primary: Save Changes */
+.btn-primary {
+    background: #80cbc4;
+    color: #fff;
+    margin-top: 0.75rem;
+}
+
+.btn-primary:hover {
+    background: #4db6ac;
+}
+
+/* Secondary button group (Change Password + Logout) */
+.btn-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+}
+
+.btn-group a {
+    display: block;
+    text-decoration: none;
+}
+
+/* Change Password */
+.btn-secondary {
+    background: transparent;
+    color: #4a6c6f;
+    border: 1px solid #b2d8d8;
+}
+
+.btn-secondary:hover {
+    background: #f0fafa;
+    transform: scale(1.01);
+}
+
+/* Logout */
+.btn-logout {
+    background: transparent;
+    color: #b94a4a;
+    border: 1px solid #f0c0c0;
+}
+
+.btn-logout:hover {
+    background: #fff5f5;
+    transform: scale(1.01);
+}
+
+/* Footer: Back link + Delete account */
+.profile-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid #eef4f4;
+}
+
+.back-link {
+    font-size: 0.82rem;
+    color: #80cbc4;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.back-link:hover {
+    color: #4db6ac;
+    text-decoration: underline;
+}
+
+/* Delete account — minimal destructive style */
+.btn-delete {
+    background: transparent;
+    border: none;
+    font-size: 0.82rem;
+    color: #c0443a;
+    cursor: pointer;
+    padding: 0;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: color 0.2s;
+}
+
+.btn-delete:hover {
+    color: #8b1a14;
+}
+
+/* Flash messages */
+.error-message {
+    color: #c0392b;
+    font-size: 0.88rem;
+    margin-bottom: 0.75rem;
+}
+
+.success-message {
+    color: #27ae60;
+    font-size: 0.88rem;
+    margin-bottom: 0.75rem;
+}
+
+.flash.warning {
+    font-size: 0.88rem;
+    color: #7a5c00;
+    background: #fff8e1;
+    border-radius: 6px;
+    padding: 0.5rem 0.75rem;
+    margin-top: 0.5rem;
+}
+
+/* Modal backdrop */
+.modal-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(30, 50, 50, 0.38);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+}
+
+.modal-backdrop.active {
+    display: flex;
+}
+
+/* Modal box */
+.modal-box {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 2.2rem 2rem 1.8rem;
+    width: 100%;
+    max-width: 380px;
+    text-align: center;
+}
+
+/* Warning icon circle */
+.modal-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: #fff5f5;
+    border: 1.5px solid #f5c6c6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.2rem;
+}
+
+.modal-icon svg {
+    width: 22px;
+    height: 22px;
+    stroke: #c0443a;
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.modal-box h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #1e3636;
+    margin-bottom: 0.5rem;
+    line-height: 1.3;
+}
+
+.modal-box p {
+    font-size: 0.875rem;
+    color: #7a9a9c;
+    line-height: 1.65;
+    margin-bottom: 1.75rem;
+    padding: 0 0.25rem;
+}
+
+/* Button row */
+.modal-actions {
+    display: flex;
+    gap: 0.65rem;
+    justify-content: center;
+}
+
+.modal-actions form {
+    margin: 0;
+    flex: 1;
+}
+
+.modal-actions .btn-secondary {
+    flex: 1;
+    padding: 0.72rem 1rem;
+    font-size: 0.9rem;
+    margin: 0;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Confirm delete button */
+.btn-confirm-delete {
+    width: 100%;
+    height: 44px;
+    padding: 0 1rem;
+    background: #e53935;
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+}
+
+.btn-confirm-delete:hover {
+    background: #c62828;
+    transform: scale(1.01);
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .profile-container {
+        padding: 1.5rem;
+    }
+
+    .profile-footer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+}

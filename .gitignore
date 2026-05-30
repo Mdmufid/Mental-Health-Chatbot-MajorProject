@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Environment variables
+.env
+
+# Database
+instance/
+*.db
+*.sqlite3
+
+# Logs
+*.log
+
+# Model files
+*.h5
+*.pt
+*.pkl
+*.joblib
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+emotion_model/models/
+emotion_model/data/raw/
+emotion_model/data/processed/
+.venv/
+pycache/
+*.pt
+*.pth
+*.bin
+*.safetensors

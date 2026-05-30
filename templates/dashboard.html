@@ -1,0 +1,182 @@
+{% extends "base.html" %}
+
+{% block body %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+
+<!-- Navigation -->
+<div class="navbar">
+    <h1>MindCare AI</h1>
+    <div class="profile-icon">
+        <a href="{{ url_for('profile.profile') }}" style="text-decoration: none;">
+            <img src="../static/images/user.png" alt="" srcset="">
+        </a>
+    </div>
+</div>
+
+<!-- Dashboard -->
+<div class="dashboard">
+    <!-- Welcome -->
+    <div class="card welcome-card">
+        <div class="welcome-text">
+            <h2>Welcome back, {{ username }}! 👋</h2>
+            <p>
+                {% if last_emotion == "joy" or last_emotion == "love" %}
+                You've been in a good headspace lately. Keep it up!
+                {% elif last_emotion == "sadness" or last_emotion == "fear" %}
+                It's okay to have tough days. I'm here whenever you need to talk.
+                {% elif last_emotion == "anger" %}
+                Take a breath — you've got this. Chat whenever you're ready.
+                {% else %}
+                How are you feeling today? I'm here to listen.
+                {% endif %}
+            </p>
+        </div>
+        <a href="{{ url_for('chatbot.chatbot') }}">
+            <button class="btn" type="button">Start Chat</button>
+        </a>
+    </div>
+
+    <!-- Usage Summary Stats -->
+    <div class="card stats-card">
+        <h2>Your Stats</h2>
+        <div class="stats-grid">
+            <div class="stat-item">
+                <span class="stat-value">{{ stats.total_sessions }}</span>
+                <span class="stat-label">Total sessions</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value">{{ stats.total_messages }}</span>
+                <span class="stat-label">Messages sent</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value">{{ stats.days_active }}</span>
+                <span class="stat-label">Days active</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value">{{ stats.member_since }}</span>
+                <span class="stat-label">Days as member</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Daily Mood Check-in -->
+    <div class="card mood-checkin-card">
+        <h2>How are you feeling today?</h2>
+        <div class="mood-options" id="mood-options">
+            <div class="mood" data-mood="happy">😊<span>Happy</span></div>
+            <div class="mood" data-mood="calm">😌<span>Calm</span></div>
+            <div class="mood" data-mood="sad">😔<span>Sad</span></div>
+            <div class="mood" data-mood="anxious">😟<span>Anxious</span></div>
+            <div class="mood" data-mood="angry">😤<span>Angry</span></div>
+            <div class="mood" data-mood="tired">😴<span>Tired</span></div>
+        </div>
+
+        <div class="mood-note-wrap" id="mood-note-wrap" style="display:none;">
+            <input type="text" id="mood-note" maxlength="200" placeholder="Add a short note (optional)..." />
+            <button class="btn mood-save-btn" id="mood-save-btn" type="button">Save check-in</button>
+        </div>
+
+        <div class="mood-feedback" id="mood-feedback" style="display:none;"></div>
+    </div>
+
+    <!-- Mood Trend Chart -->
+    <div class="card mood-chart-card">
+        <div class="chart-header">
+            <h2>Mood Trend</h2>
+            <span class="chart-subtitle">Last 14 days</span>
+        </div>
+
+        {% if mood_chart.has_data %}
+        <div class="chart-wrap">
+            <canvas id="moodChart"></canvas>
+        </div>
+        <div class="chart-legend">
+            <span class="legend-item joy">Joy</span>
+            <span class="legend-item love">Love</span>
+            <span class="legend-item neutral">Neutral</span>
+            <span class="legend-item low">Low</span>
+            <span class="legend-item distressed">Distressed</span>
+        </div>
+        {% else %}
+        <!-- Empty state for new users -->
+        <div class="chart-empty">
+            <div class="chart-empty-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M3 3v18h18" />
+                    <path d="M7 16l4-4 4 4 4-6" />
+                </svg>
+            </div>
+            <p class="chart-empty-title">No mood data yet</p>
+            <p class="chart-empty-sub">Start a conversation with the chatbot and your mood trend will appear here.</p>
+            <a href="{{ url_for('chatbot.chatbot') }}">
+                <button class="btn" type="button">Start your first chat</button>
+            </a>
+        </div>
+        {% endif %}
+    </div>
+
+    {% if mood_chart.has_data %}
+    <script type="application/json" id="mood-chart-data">
+        {
+            "labels":       {{ mood_chart.labels | safe }},
+            "scores":       {{ mood_chart.scores | safe }},
+            "emotions":     {{ mood_chart.emotions | safe }},
+            "emotionLabel": {{ mood_chart.emotion_label | safe }}
+        }
+    </script>
+    {% endif %}
+
+    <!-- Wellness Tips Feed -->
+    <div class="card tips-card">
+        <div class="tips-header">
+            <h2>Wellness Tips</h2>
+            {% set emotion_labels = {
+            "joy": "😊 Feeling joyful",
+            "love": "💛 Feeling loved",
+            "sadness": "😔 Feeling low",
+            "anger": "😤 Feeling frustrated",
+            "fear": "😟 Feeling anxious",
+            "neutral": "😌 General wellness",
+            "crisis": "🆘 Crisis support",
+            "sensitive": "🤝 Gentle reminders"
+            } %}
+            <span class="emotion-badge emotion-{{ last_emotion }}">
+                {{ emotion_labels.get(last_emotion, "😌 General wellness") }}
+            </span>
+        </div>
+
+        <div class="tips-list" id="tips-list">
+            {% for tip in tips %}
+            <div class="tip-item {% if loop.first %}active{% endif %}" data-index="{{ loop.index0 }}">
+                <p>{{ tip }}</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        {% if tips|length > 1 %}
+        <div class="tips-nav">
+            <button class="tip-nav-btn" id="tip-prev" type="button">&#8592;</button>
+            <span class="tip-counter">
+                <span id="tip-current">1</span> / {{ tips|length }}
+            </span>
+            <button class="tip-nav-btn" id="tip-next" type="button">&#8594;</button>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Logout -->
+<div class="logout">
+    <a href="{{ url_for('auth.logout') }}">
+        <button class="btn">Logout</button>
+    </a>
+</div>
+
+{% endblock %}
+
+{% block js %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}

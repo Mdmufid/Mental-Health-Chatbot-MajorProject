@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block body %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/chatbot.css') }}">
+
+<div class="chat-page">
+    <main class="chat-container">
+        <header class="chat-header">
+            <a href="{{ url_for('dashboard.dashboard') }}">
+                <img src="{{ url_for('static', filename='images/left-arrow.png') }}" alt="Back">
+            </a>
+
+            <div>
+                <span id="typing-section-style" class="without-bot">
+                    <span class="logo">MindCare AI</span>
+                    <span id="typing-indicator">
+                        Typing…
+                    </span>
+                </span>
+
+                <button id="dark-mode-toggle" type="button">🌙</button>
+            </div>
+        </header>
+
+        <input type="hidden" id="conversation-id" value="{{ active_conversation.id if active_conversation else '' }}">
+
+        <main id="chat-box" class="chat-box">
+            {% if messages and messages|length > 0 %}
+            {% for msg in messages %}
+            <div
+                class="{{ 'user-msg' if msg.role == 'user' else 'bot-msg' }} {{ msg.emotion if msg.role != 'user' and msg.emotion else 'neutral' }}">
+                {% if msg.role == 'user' %}
+                You: {{ msg.content }}
+                {% else %}
+                {{ msg.content }}
+                {% endif %}
+            </div>
+            {% endfor %}
+            {% else %}
+            <div class="bot-msg neutral">
+                Hi! I'm your AI Mental Health Assistant. How can I help you today?
+            </div>
+            {% endif %}
+        </main>
+
+        <footer class="input-area">
+            <input type="text" id="user-input" placeholder="Type your message..." autocomplete="off" />
+            <div id="mic-btn">
+                <img src="{{ url_for('static', filename='images/microphone.png') }}" alt="Mic">
+            </div>
+            <button id="send-btn" type="button">
+                <img src="{{ url_for('static', filename='images/send.png') }}" alt="Send">
+            </button>
+        </footer>
+    </main>
+
+    <aside class="chat-sidebar">
+        <div class="sidebar-header">
+            <h3>Chat History</h3>
+            <a href="{{ url_for('chatbot.chatbot') }}" class="new-chat-btn" id="new-chat-btn">+ New Chat</a>
+        </div>
+
+        <div class="export-bar">
+            <span class="export-label">Export history</span>
+            <div class="export-btns">
+                <a href="{{ url_for('chatbot.export_chat', format='txt') }}" class="export-btn">
+                    .txt
+                </a>
+                <a href="{{ url_for('chatbot.export_chat', format='csv') }}" class="export-btn">
+                    .csv
+                </a>
+            </div>
+        </div>
+
+        <!-- ✅ NEW: Search bar -->
+        <div class="sidebar-search">
+            <input type="text" id="history-search" placeholder="Search conversations..." autocomplete="off" />
+            <span class="search-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8" />
+                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
+            </span>
+        </div>
+
+        <div class="history-list" id="history-list">
+            {% for convo in conversations %}
+            <a href="{{ url_for('chatbot.chat_history', conversation_id=convo.id) }}"
+                class="history-item {% if active_conversation and convo.id == active_conversation.id %}active{% endif %}"
+                data-title="{{ convo.title | lower }}">
+                <div class="history-title">{{ convo.title }}</div>
+                <div class="history-date">{{ convo.updated_at.strftime('%b %d, %Y') }}</div>
+            </a>
+            {% else %}
+            <div class="empty-history">No chat history yet.</div>
+            {% endfor %}
+        </div>
+
+        <!-- ✅ NEW: No results message (hidden by default) -->
+        <div class="no-results" id="no-results" style="display:none;">
+            No conversations match your search.
+        </div>
+    </aside>
+</div>
+{% endblock %}
+
+{% block js %}
+<script src="{{ url_for('static', filename='js/chatbot.js') }}"></script>
+{% endblock %}

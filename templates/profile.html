@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block body %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+
+<div class="profile-wrapper">
+    <div class="profile-container">
+        <h2>Your Profile</h2>
+        <!-- <img src="https://via.placeholder.com/100" alt="Profile Avatar" class="avatar" id="avatarPreview"> -->
+        <!-- <div class="upload-btn">
+            <input type="file" id="avatarUpload" accept="image/*">
+        </div> -->
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <!-- <div class="flash {{ category }}">{{ message }}</div> -->
+                    <div class="{{ 'error-message' if category == 'error' else 'success-message' }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form id="profileForm" method="POST" action="{{ url_for('profile.profile') }}">
+            <div class="form-group">
+                <label for="fullname">Full Name</label>
+                <input type="text" id="fullname" name="fullname" value="{{ fullname }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" value="{{ username }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" value="{{ email }}" required>
+            </div>
+
+            {% if pending_email %}
+            <div class="flash warning">
+                Verification pending for: <strong>{{ pending_email }}</strong>
+            </div>
+            {% endif %}
+
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+        </form>
+
+        <div class="btn-group">
+            <a href="{{ url_for('profile.change_password') }}">
+                <button class="btn btn-secondary" type="button">Change Password</button>
+            </a>
+            <a href="{{ url_for('auth.logout') }}">
+                <button class="btn btn-logout" type="button">Logout</button>
+            </a>
+        </div>
+
+        <div class="profile-footer">
+            <a href="{{ url_for('dashboard.dashboard') }}" class="back-link">← Back to Dashboard</a>
+            <!-- Triggers the modal, does NOT submit directly -->
+            <button type="button" class="btn-delete" id="openDeleteModal">Delete account</button>
+        </div>
+    </div>
+</div>
+
+<!-- Confirmation Modal -->
+<div class="modal-backdrop" id="deleteModal" aria-hidden="true">
+    <div class="modal-box" role="dialog" aria-labelledby="modalTitle">
+
+        <!-- Warning icon -->
+        <div class="modal-icon">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+            </svg>
+        </div>
+
+        <h3 id="modalTitle">Delete your account?</h3>
+        <p>This will permanently remove your profile, chat history, and all associated data. This cannot be undone.</p>
+
+        <div class="modal-actions">
+            <button type="button" class="btn btn-secondary" id="cancelDelete">Cancel</button>
+            <form method="POST" action="{{ url_for('profile.delete_account') }}">
+                <button type="submit" class="btn-confirm-delete">Yes, delete account</button>
+            </form>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script src="{{ url_for('static', filename='js/profile.js') }}"></script>
+{% endblock %}
