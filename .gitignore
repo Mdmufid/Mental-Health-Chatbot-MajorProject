@@ -40,3 +40,5 @@ pycache/
 *.pth
 *.bin
 *.safetensors
+echo "*.pptx" >> .gitignore
+echo "*.docx" >> .gitignore
