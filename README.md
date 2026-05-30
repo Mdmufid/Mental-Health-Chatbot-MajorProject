@@ -1,3 +1,14 @@
+---
+title: Mental Health Chatbot
+emoji: 🧠
+colorFrom: blue
+colorTo: green
+sdk: docker
+pinned: false
+app_port: 7860
+---
+
+
 # 🧠 An Emotion-Aware Mental Health Chatbot — Major Project
 
 > A full-stack AI-powered mental health web application built with **Flask**, **SQLAlchemy**, **DistilBERT v3**, and **OpenRouter (LLaMA 3.1 70B)**. Features user authentication, persistent conversation history, mood logging, real-time emotion detection, crisis intervention, and a custom HTML/CSS/JavaScript UI.
