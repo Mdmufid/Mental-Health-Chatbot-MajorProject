@@ -19,13 +19,15 @@ app.register_blueprint(profile_bp)
 app.register_blueprint(dashboard_bp)
 app.register_blueprint(chatbot_bp)
 
+# Create all DB tables on startup (works with gunicorn too)
+with app.app_context():
+    db.create_all()
+
 # Home route (entry point)
 @app.route("/")
 def home():
     return redirect(url_for("auth.login"))
 
-# Run App
+# Run App (local development only)
 if __name__ == "__main__":
-    with app.app_context():
-        db.create_all()
     app.run(debug=True)
