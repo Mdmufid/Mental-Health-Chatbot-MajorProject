@@ -12,7 +12,7 @@ app_port: 7860
 
 > A full-stack AI-powered mental health web application built with **Flask**, **SQLAlchemy**, **DistilBERT v3**, and **OpenRouter (LLaMA 3.1 70B)**. Features user authentication, persistent conversation history, mood logging, real-time emotion detection, crisis intervention, and a custom HTML/CSS/JavaScript UI — deployed live on **Hugging Face Spaces** with **Neon PostgreSQL**.
 
-🔗 **Live Demo:** [huggingface.co/spaces/MdMufid/mental-health-chatbot](https://huggingface.co/spaces/MdMufid/mental-health-chatbot)
+🔗 **Live Demo:** [huggingface.co/spaces/MdMufid/mental-health-chatbot](https://mdmufid-mental-health-chatbot.hf.space/)
 🤗 **Emotion Model:** [huggingface.co/MdMufid/mental-health-emotion-model](https://huggingface.co/MdMufid/mental-health-emotion-model)
 
 ---
